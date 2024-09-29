@@ -1,0 +1,28 @@
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    background-color:rgba(204, 208, 207, 0.5) ;
+       
+    
+    
+    }
+
+    .navbar{
+        background-color: rgba(17, 33, 45, .75);
+    }
+
+.nav-link{
+    color: #fff;
+}
+
+.card {
+    padding: 1%;
+    width: 400px;
+    height: auto;
+    margin: 5%;
+    background: rgba(155, 168, 171, .5);
+}
