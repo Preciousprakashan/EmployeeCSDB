@@ -1,39 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%=title%></title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+    <title><%= title %></title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
-
 <body>
 
-    <nav class="navbar navbar-expand-lg ">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-          <!-- <a class="navbar-brand" href="#">Navbar</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button> -->
-          <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <% for(let i=0; i < nav.length; i++) { %>
-              <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="<%= nav[i].link %>"><%= nav[i].name %></a>
-                <% } %>
-            </ul>
-          </div>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <% nav.forEach(item => { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<%= item.link %>"><%= item.name %></a>
+                    </li>
+                    <% }); %>
+                </ul>
+            </div>
         </div>
-      </nav>
+    </nav>
 
-
-
-      <div class="container mt-4">
+    <!-- Employee List -->
+    <div class="container mt-4">
+        <a href="/basic/employeeadd" class="btn btn-success mb-4">Add Employee</a>
         <div class="row">
-            <!-- Loop through employees and generate a card for each -->
             <% employees.forEach(employee => { %>
             <div class="col-md-4">
                 <div class="card mb-4 shadow-sm">
@@ -42,27 +35,19 @@
                         <p class="card-text">Designation: <%= employee.EmployeeDesignation %></p>
                         <p class="card-text">Location: <%= employee.EmployeeLocation %></p>
                         <p class="card-text">Salary: $<%= employee.Salary %></p>
+                        
+                        <a href="/edit/<%= employee._id %>" class="btn btn-primary">Edit</a>
+                        
+                        <!-- Delete Form -->
+                        <form action="/delete/<%= employee._id %>?_method=DELETE" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
                     </div>
                 </div>
             </div>
-            <% }) %>
+            <% }); %>
         </div>
     </div>
 
-
-    <div class="image-bg">
-        <!-- Image Background -->
-    </div>
-    
-
-    
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
-    <script src="script.js"></script>
 </body>
-
 </html>

@@ -6,67 +6,83 @@ router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
 
 function userroute(nav) {
-
     // GET all employees
     router.get('/', async (req, res) => {
         try {
             const data = await employeeModel.find(); // Fetch all employees
-            res.render('index', { // Render index.ejs and pass the data
+            res.render('index', {
                 title: 'Employee List',
                 nav,
-                employees: data // Pass employees data
+                employees: data
             });
         } catch (error) {
             res.status(500).send('Error fetching data: ' + error.message);
         }
     });
 
-    // POST - Add a new employee
+    // GET Add Employee form
+    router.get('/basic/employeeadd', (req, res) => {
+        res.render('addEmployee', {
+            title: 'Add Employee',
+            nav
+        });
+    });
+
+    // POST Add Employee
     router.post('/addEmployee', async (req, res) => {
         try {
             const item = req.body;
             const data1 = new employeeModel(item);
             await data1.save();
-            res.status(201).send('Post Successful');
+            res.redirect('/');
         } catch (error) {
             res.status(400).send('Error adding employee: ' + error.message);
         }
     });
 
-    // PUT - Update an employee by ID
+    // GET Edit Employee form
+    router.get('/edit/:id', async (req, res) => {
+        try {
+            const employee = await employeeModel.findById(req.params.id);
+            if (!employee) {
+                return res.status(404).send('Employee not found');
+            }
+            res.render('editEmployee', {
+                title: 'Edit Employee',
+                nav,
+                employee
+            });
+        } catch (error) {
+            res.status(500).send('Error fetching employee: ' + error.message);
+        }
+    });
+
+    // PUT Update Employee
     router.put('/edit/:id', async (req, res) => {
         try {
             const id = req.params.id;
-            const data = await employeeModel.findByIdAndUpdate(id, req.body, { new: true });
-            if (!data) {
+            const updatedEmployee = await employeeModel.findByIdAndUpdate(id, req.body, { new: true });
+            if (!updatedEmployee) {
                 return res.status(404).send('Employee not found');
             }
-            res.status(200).send(data);
+            res.redirect('/');
         } catch (error) {
             res.status(400).send('Error updating employee: ' + error.message);
         }
     });
 
-    // DELETE - Remove an employee by ID
+    // DELETE Employee
     router.delete('/delete/:id', async (req, res) => {
         try {
             const id = req.params.id;
-            const data = await employeeModel.findByIdAndDelete(id);
-            if (!data) {
+            const deletedEmployee = await employeeModel.findByIdAndDelete(id);
+            if (!deletedEmployee) {
                 return res.status(404).send('Employee not found');
             }
-            res.status(200).send('Employee deleted');
+            res.redirect('/');
         } catch (error) {
-            res.status(500).send('Error deleting employee: ' + error.message);
+            res.status(400).send('Error deleting employee: ' + error.message);
         }
-    });
-
-    // Render the index page
-    router.get('/', (req, res) => {
-        res.render('index', {
-            title: 'Home',
-            nav
-        });
     });
 
     return router;
